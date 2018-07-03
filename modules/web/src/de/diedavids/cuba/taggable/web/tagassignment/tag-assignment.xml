@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://addTags"
+        class="de.diedavids.cuba.taggable.web.tagassignment.TagAssignment"
+        focusComponent="tagsTokenList"
+        messagesPack="de.diedavids.cuba.taggable.web.tagassignment">
+
+    <actions>
+        <action id="windowCommit" caption="msg://actions.Ok" invoke="commitAndClose"/>
+        <action id="windowClose" caption="msg://actions.Cancel" invoke="close"/>
+    </actions>
+    <dsContext>
+        <collectionDatasource id="taggableTagsDs"
+                              allowCommit="false"
+                              class="de.diedavids.cuba.taggable.entity.Tag"
+                              datasourceClass="de.diedavids.cuba.taggable.web.TagsCollectionDatasource"
+                              view="_minimal">
+        </collectionDatasource>
+        <collectionDatasource id="allTagsDs"
+                              allowCommit="false"
+                              class="de.diedavids.cuba.taggable.entity.Tag"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from ddct$Tag e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode modal="false"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <tokenList id="tagsTokenList" datasource="taggableTagsDs" inline="true" clearEnabled="false" width="100%">
+            <lookup optionsDatasource="allTagsDs" multiselect="true" filterMode="STARTS_WITH" />
+        </tokenList>
+
+        <hbox id="windowActions" spacing="true" stylename="c-edit-window-actions">
+            <button id="windowCommit" action="windowCommit" icon="EDITOR_OK"/>
+            <button id="windowClose" action="windowClose" icon="EDITOR_CANCEL"/>
+        </hbox>
+    </layout>
+</window>

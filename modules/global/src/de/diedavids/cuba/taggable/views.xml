@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+    <view class="de.diedavids.cuba.taggable.entity.Tagging"
+          extends="_local"
+          name="tagging-view">
+        <property name="tag"
+                  view="_minimal"/>
+        <property name="tagger"
+                  view="_minimal"/>
+    </view>
+</views>
