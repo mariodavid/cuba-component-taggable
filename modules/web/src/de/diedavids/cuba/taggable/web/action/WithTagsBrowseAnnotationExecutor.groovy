@@ -1,6 +1,7 @@
 package de.diedavids.cuba.taggable.web.action
 
 import com.haulmont.cuba.core.entity.Entity
+import com.haulmont.cuba.core.global.Messages
 import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.components.actions.BaseAction
@@ -36,6 +37,12 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
     @Inject
     protected TaggingService taggingService
 
+
+    @Inject
+    protected Messages messages
+
+
+
     @SuppressWarnings('Instanceof')
     boolean supports(Annotation annotation) {
         annotation instanceof WithTags
@@ -67,7 +74,7 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
     }
 
     protected void addTagsColumnToTable(WithTags annotation, Table table) {
-        table.addGeneratedColumn("tags", new Table.ColumnGenerator<Entity>() {
+        table.addGeneratedColumn(messages.getMainMessage("column.tags"), new Table.ColumnGenerator<Entity>() {
             @Override
             Component generateCell(Entity entity) {
                 Collection<Tag> tags = taggingService.getTags(entity)
