@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.com/mariodavid/cuba-component-taggable.svg?branch=master)](https://travis-ci.com/mariodavid/cuba-component-taggable)
-[ ![Download](https://api.bintray.com/packages/mariodavid/cuba-components/cuba-component-taggable/images/download.svg) ](https://bintray.com/mariodavid/cuba-components/cuba-component-taggable/_latestVersion)
 [![license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 
 CUBA component - Taggable
@@ -17,7 +16,7 @@ This application component let's you enhance your entities with a generic taggin
 | 6.9.x            | 0.1.x          |
 
 
-The latest version is: [ ![Download](https://api.bintray.com/packages/mariodavid/cuba-components/cuba-component-taggable/images/download.svg) ](https://bintray.com/mariodavid/cuba-components/cuba-component-taggable/_latestVersion)
+The latest version is: <<NOT_AVAILABLE :)>>
 
 Add custom application component to your project:
 
