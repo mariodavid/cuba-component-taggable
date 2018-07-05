@@ -25,6 +25,9 @@ public class TagAssignment extends AbstractWindow {
     @WindowParam(required = true)
     Entity taggable;
 
+    @WindowParam
+    String persistentAttribute;
+
 
     @Override
     public void ready() {
@@ -32,7 +35,7 @@ public class TagAssignment extends AbstractWindow {
     }
 
     public void commitAndClose() {
-        taggingService.tagEntity(taggable, taggableTagsDs.getItems());
+        taggingService.tagEntity(taggable, taggableTagsDs.getItems(), persistentAttribute);
         close(COMMIT_ACTION_ID);
     }
 

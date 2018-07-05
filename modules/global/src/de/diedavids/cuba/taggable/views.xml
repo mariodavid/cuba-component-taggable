@@ -8,4 +8,10 @@
         <property name="tagger"
                   view="_minimal"/>
     </view>
+    <view class="de.diedavids.cuba.taggable.entity.Tag"
+          extends="_local"
+          name="tag-view">
+        <property name="taggings"
+                  view="tagging-view"/>
+    </view>
 </views>

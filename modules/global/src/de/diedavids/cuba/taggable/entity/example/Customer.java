@@ -10,7 +10,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 @Table(name = "DDCT_CUSTOMER")
 @Entity(name = "ddct$Customer")
 public class Customer extends StandardEntity {
-    private static final long serialVersionUID = -7732835062793654772L;
+    private static final long serialVersionUID = -5892137580623994867L;
 
     @Column(name = "NAME")
     protected String name;

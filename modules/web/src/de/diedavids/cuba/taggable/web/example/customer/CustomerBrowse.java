@@ -1,5 +1,5 @@
 package de.diedavids.cuba.taggable.web.example.customer;
-
+/*
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
@@ -62,7 +62,8 @@ public class CustomerBrowse extends AbstractLookup {
 
     public void tag() {
 
-        AbstractWindow assignTags = openWindow("ddct$TagAssignment", WindowManager.OpenType.DIALOG, ParamsMap.of("taggable", customersTable.getSingleSelected()));
+        AbstractWindow assignTags = openWindow("ddct$TagAssignment", WindowManager.OpenType.DIALOG, ParamsMap.of("taggable", customersTable.getSingleSelected(), "persistentTaggableAttribute", "customer"));
         assignTags.addCloseWithCommitListener(() -> customersDs.refresh());
     }
 }
+*/

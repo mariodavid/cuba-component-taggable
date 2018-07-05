@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="de.diedavids.cuba.taggable.web.tag.TagEdit"
+        datasource="tagDs"
+        focusComponent="entitiesWithTagsTable"
+        messagesPack="de.diedavids.cuba.taggable.web.tag">
+    <dsContext>
+        <datasource id="tagDs"
+                    class="de.diedavids.cuba.taggable.entity.Tag"
+                    view="tag-view">
+            <collectionDatasource id="taggingsDs"
+                                  property="taggings"/>
+        </datasource>
+        <valueCollectionDatasource
+                id="entitiesWithTagDs"
+                datasourceClass="de.diedavids.cuba.taggable.web.TaggedEntitiesDatasource">
+            <properties>
+                <property name="instanceName"/>
+            </properties>
+        </valueCollectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="entitiesWithTagsTable"
+            spacing="true">
+        <table id="entitiesWithTagsTable"
+               width="100%"
+               settingsEnabled="false"
+               presentations="false"
+               columnHeaderVisible="false">
+            <columns>
+                <column id="instanceName" link="true" linkInvoke="openEntity" />
+            </columns>
+            <rows datasource="entitiesWithTagDs"/>
+        </table>
+    </layout>
+</window>

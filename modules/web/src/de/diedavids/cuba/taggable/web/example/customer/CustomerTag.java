@@ -1,5 +1,5 @@
 package de.diedavids.cuba.taggable.web.example.customer;
-
+/*
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
@@ -38,3 +38,4 @@ public class CustomerTag extends AbstractEditor<Customer> {
         return super.preCommit();
     }
 }
+*/
