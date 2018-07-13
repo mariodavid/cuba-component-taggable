@@ -8,7 +8,7 @@ This application component let's you enhance your entities with a generic taggin
 
 ## Installation
 
-1. taggable is available in the [CUBA marketplace](https://www.cuba-platform.com/marketplace)
+1. `taggable` is available in the [CUBA marketplace](https://www.cuba-platform.com/marketplace)
 2. Select a version of the add-on which is compatible with the platform version used in your project:
 
 | Platform Version | Add-on Version |
