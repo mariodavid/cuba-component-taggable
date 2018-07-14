@@ -2,10 +2,6 @@
 <screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
     <screen id="ddct$TagAssignment"
             template="de/diedavids/cuba/taggable/web/tagassignment/tag-assignment.xml"/>
-    <screen id="ddct$Customer.browse"
-            template="de/diedavids/cuba/taggable/web/test/customer/customer-browse.xml"/>
-    <screen id="ddct$Customer.edit"
-            template="de/diedavids/cuba/taggable/web/test/customer/customer-edit.xml"/>
     <screen id="ddct$Tag.edit"
             template="de/diedavids/cuba/taggable/web/tag/tag-edit.xml"/>
     <screen id="ddct$Tag.create"

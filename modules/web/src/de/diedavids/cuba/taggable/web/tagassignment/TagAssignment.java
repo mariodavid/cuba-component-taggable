@@ -5,15 +5,12 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import de.diedavids.cuba.taggable.entity.Tag;
-import de.diedavids.cuba.taggable.entity.example.Customer;
 import de.diedavids.cuba.taggable.service.TaggingService;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.UUID;
 
 public class TagAssignment extends AbstractWindow {
@@ -21,9 +18,9 @@ public class TagAssignment extends AbstractWindow {
     @Inject
     protected CollectionDatasource<Tag, UUID> taggableTagsDs;
 
-
     @Inject
     protected CollectionDatasource<Tag, UUID> allTagsDs;
+
     @Inject
     protected TaggingService taggingService;
 

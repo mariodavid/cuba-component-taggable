@@ -58,7 +58,6 @@
     <class>com.haulmont.cuba.core.entity.ReferenceToEntity</class>
     <class>de.diedavids.cuba.taggable.entity.Tag</class>
     <class>de.diedavids.cuba.taggable.entity.Tagging</class>
-    <class>de.diedavids.cuba.taggable.entity.example.Customer</class>
     <exclude-unlisted-classes/>
     <properties>
       <property name="eclipselink.cache.coordination.propagate-asynchronously" value="false"/>
