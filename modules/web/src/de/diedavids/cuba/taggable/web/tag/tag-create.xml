@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://createCaption"
+        class="de.diedavids.cuba.taggable.web.tag.TagCreate"
+        datasource="tagDs"
+        focusComponent="fieldGroup"
+        messagesPack="de.diedavids.cuba.taggable.web.tag">
+    <dsContext>
+        <datasource id="tagDs"
+                    class="de.diedavids.cuba.taggable.entity.Tag"
+                    view="tag-view">
+            <collectionDatasource id="taggingsDs"
+                                  property="taggings"/>
+        </datasource>
+    </dsContext>
+    <dialogMode
+        width="300px"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup" width="100%"
+                    datasource="tagDs">
+            <column width="100%">
+                <field property="value" caption=""/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

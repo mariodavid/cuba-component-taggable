@@ -2,6 +2,8 @@ package de.diedavids.cuba.taggable.web.tagassignment;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.AbstractWindow;
@@ -19,6 +21,9 @@ public class TagAssignment extends AbstractWindow {
     @Inject
     protected CollectionDatasource<Tag, UUID> taggableTagsDs;
 
+
+    @Inject
+    protected CollectionDatasource<Tag, UUID> allTagsDs;
     @Inject
     protected TaggingService taggingService;
 
@@ -28,6 +33,8 @@ public class TagAssignment extends AbstractWindow {
     @WindowParam
     String persistentAttribute;
 
+    @Inject
+    protected Metadata metadata;
 
     @Override
     public void ready() {
@@ -43,4 +50,14 @@ public class TagAssignment extends AbstractWindow {
         close(CLOSE_ACTION_ID);
     }
 
+    public void createTag() {
+
+        Tag newTag = metadata.create(Tag.class);
+
+        openEditor("ddct$Tag.create", newTag, WindowManager.OpenType.DIALOG)
+            .addCloseWithCommitListener(() -> {
+            allTagsDs.refresh();
+            taggableTagsDs.addItem(newTag);
+        });
+    }
 }

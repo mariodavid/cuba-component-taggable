@@ -8,4 +8,6 @@
             template="de/diedavids/cuba/taggable/web/test/customer/customer-edit.xml"/>
     <screen id="ddct$Tag.edit"
             template="de/diedavids/cuba/taggable/web/tag/tag-edit.xml"/>
+    <screen id="ddct$Tag.create"
+            template="de/diedavids/cuba/taggable/web/tag/tag-create.xml"/>
 </screen-config>

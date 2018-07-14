@@ -8,6 +8,11 @@
     <actions>
         <action id="windowCommit" caption="msg://actions.Ok" invoke="commitAndClose"/>
         <action id="windowClose" caption="msg://actions.Cancel" invoke="close"/>
+        <action id="createTag"
+                caption="msg://createTag"
+                icon="PLUS"
+                invoke="createTag"
+        />
     </actions>
     <dsContext>
         <collectionDatasource id="taggableTagsDs"
@@ -26,11 +31,19 @@
         </collectionDatasource>
     </dsContext>
     <dialogMode modal="false"/>
-    <layout expand="windowActions"
+    <layout expand="tagManagementBox"
             spacing="true">
-        <tokenList id="tagsTokenList" datasource="taggableTagsDs" inline="true" clearEnabled="false" width="100%">
-            <lookup optionsDatasource="allTagsDs" multiselect="true" filterMode="STARTS_WITH" />
-        </tokenList>
+        <hbox id="tagManagementBox"
+              expand="tagsTokenList"
+              width="100%"
+              spacing="true">
+            <tokenList id="tagsTokenList" datasource="taggableTagsDs" inline="true" clearEnabled="false">
+                <lookup optionsDatasource="allTagsDs" multiselect="true" filterMode="STARTS_WITH"/>
+            </tokenList>
+            <button id="createTagBtn"
+                    action="createTag"
+            />
+        </hbox>
 
         <hbox id="windowActions" spacing="true" stylename="c-edit-window-actions">
             <button id="windowCommit" action="windowCommit" icon="EDITOR_OK"/>

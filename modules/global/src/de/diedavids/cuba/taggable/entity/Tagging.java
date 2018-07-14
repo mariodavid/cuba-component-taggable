@@ -1,17 +1,13 @@
 package de.diedavids.cuba.taggable.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.security.entity.User;
-import de.diedavids.cuba.entitysoftreference.EntitySoftReferenceDatatype;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import de.diedavids.cuba.entitysoftreference.EntitySoftReferenceConverter;
+
 import javax.validation.constraints.NotNull;
 import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.Index;
 
 @Table(name = "DDCT_TAGGING", indexes = {
     @Index(name = "IDX_DDCT_TAGGING_ON_TAGGABLE", columnList = "TAGGABLE")
@@ -27,6 +23,7 @@ public class Tagging extends StandardEntity {
 
     @NotNull
     @MetaProperty(datatype = "EntitySoftReference", mandatory = true)
+    @Convert(converter = EntitySoftReferenceConverter.class)
     @Column(name = "TAGGABLE", nullable = false)
     protected com.haulmont.cuba.core.entity.Entity taggable;
 

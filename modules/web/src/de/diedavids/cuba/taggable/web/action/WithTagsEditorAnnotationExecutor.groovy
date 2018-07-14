@@ -12,7 +12,7 @@ import javax.inject.Inject
 import java.lang.annotation.Annotation
 
 @CompileStatic
-@Component('ddca$HasAttachmentsEditorAnnotationExecutor')
+@Component('ddct$WithTagsEditorAnnotationExecutor')
 class WithTagsEditorAnnotationExecutor implements EditorAnnotationExecutor<WithTags> {
 
 
