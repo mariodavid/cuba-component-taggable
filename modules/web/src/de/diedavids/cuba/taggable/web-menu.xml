@@ -2,6 +2,6 @@
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
     <menu id="application-ddct"
           insertBefore="administration">
-        <item screen="ddct$Customer.browse"/>
+        <!--<item screen="ddct$Customer.browse"/>-->
     </menu>
 </menu-config>
