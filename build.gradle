@@ -35,7 +35,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'de.diedavids.cuba.taggable'
-        version = "0.2.1"
+        version = "0.2.2"
         isSnapshot = false
     }
     tomcat {
@@ -90,7 +90,7 @@ subprojects {
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.6.0")
-    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.3.1")
+    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.3.2")
 
 }
 
