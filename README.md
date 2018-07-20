@@ -14,7 +14,7 @@ This application component let's you enhance your entities with a generic taggin
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
-| 6.9.x            | 0.1.x          |
+| 6.9.x            | 0.1.x - 0.2.x  |
 
 
 The latest version is: [ ![Download](https://api.bintray.com/packages/mariodavid/cuba-components/cuba-component-taggable/images/download.svg) ](https://bintray.com/mariodavid/cuba-components/cuba-component-taggable/_latestVersion)
