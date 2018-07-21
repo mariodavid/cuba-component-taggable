@@ -1,7 +1,5 @@
 package de.diedavids.cuba.taggable.web.action
 
-import com.haulmont.bali.util.ParamsMap
-import com.haulmont.chile.core.model.MetaClass
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.Messages
 import com.haulmont.cuba.gui.WindowManager
@@ -15,7 +13,7 @@ import org.springframework.stereotype.Component
 import javax.inject.Inject
 
 @CompileStatic
-@Component('ddcdi$WithImportBean')
+@Component('ddct$WithTagsBean')
 class WithTagsBean {
 
     public static final String ACTION_ID = 'addTags'
