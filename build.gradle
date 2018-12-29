@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.9.2'
+    ext.cubaVersion = '6.10.6'
     repositories {
         
         maven {
@@ -89,12 +89,12 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.6.0")
-    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.3.2")
+    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.7.0")
+    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.4.0")
 
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.2.9'
+def mysql = 'mysql:mysql-connector-java:5.1.46'
 
 configure([globalModule, coreModule, webModule]) {
     apply(plugin: 'java')
@@ -126,7 +126,9 @@ configure([globalModule, coreModule, webModule]) {
 }
 
 configure(globalModule) {
-    task enhance(type: CubaEnhancing)
+    entitiesEnhancing {
+        main { enabled = true }
+    }
 
     jar {
         manifest {
@@ -148,8 +150,8 @@ configure(coreModule) {
     dependencies {
         compile(globalModule)
         provided(servletApi)
-        jdbc(hsql)
-        testRuntime(hsql)
+        jdbc(mysql)
+        testRuntime(mysql)
 
     }
 
@@ -170,19 +172,21 @@ configure(coreModule) {
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
-        dbms = 'hsql'
+        connectionParams = '?useSSL=false&allowMultiQueries=true'
+        dbms = 'mysql'
         host = 'localhost'
         dbName = 'ddct'
-        dbUser = 'sa'
-        dbPassword = ''
+        dbUser = 'cuba'
+        dbPassword = 'cuba'
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
-        dbms = 'hsql'
+        connectionParams = '?useSSL=false&allowMultiQueries=true'
+        dbms = 'mysql'
         host = 'localhost'
         dbName = 'ddct'
-        dbUser = 'sa'
-        dbPassword = ''
+        dbUser = 'cuba'
+        dbPassword = 'cuba'
     }
 }
     
