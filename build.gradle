@@ -2,7 +2,6 @@
 buildscript {
     ext.cubaVersion = '6.10.6'
     repositories {
-        
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
@@ -17,6 +16,8 @@ buildscript {
 
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
 
+        classpath 'net.saliman:gradle-cobertura-plugin:2.5.0'
+        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
     }
 }
 
@@ -24,6 +25,8 @@ buildscript {
 plugins {
     id 'net.researchgate.release' version '2.6.0'
 }
+
+apply plugin: "com.github.kt3k.coveralls"
 
 
 def modulePrefix = 'taggable'
@@ -33,7 +36,6 @@ def coreModule = project(":${modulePrefix}-core")
 def webModule = project(":${modulePrefix}-web")
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
-
 
 apply(plugin: 'idea')
 apply(plugin: 'cuba')
@@ -102,6 +104,37 @@ dependencies {
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
 
+
+allprojects {
+    apply plugin: 'net.saliman.cobertura'
+}
+
+
+def files = subprojects
+        .findAll { !it.name.toLowerCase().contains('theme') }
+        .collect { new File(it.projectDir, '/build/cobertura/cobertura.ser') }
+def sourceDirs = subprojects
+        .findAll { !it.name.toLowerCase().contains('theme') }
+        .collect { new File(it.projectDir, '/src') }
+
+cobertura {
+    coverageFormats = ['html', 'xml']
+    coverageMergeDatafiles = files
+    coverageCheckTotalBranchRate = 0
+    coverageCheckTotalLineRate = 0
+    coverageCheckHaltOnFailure = true
+    coverageSourceDirs = sourceDirs
+//    coverageCheckLineRate = 1
+    coverageCheckRegexes = [[regex: '.*\\$.*', branchRate: 0, lineRate: 0]]
+
+}
+
+
+test.dependsOn(subprojects.collect { ":${it.name}:test" })
+test.finalizedBy(project.tasks.cobertura)
+test.finalizedBy(project.tasks.coberturaCheck)
+
+
 configure([globalModule, coreModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
@@ -110,6 +143,11 @@ configure([globalModule, coreModule, webModule]) {
 
     dependencies {
         testCompile('junit:junit:4.12')
+        testCompile 'org.assertj:assertj-core:2.9.0'
+
+        testCompile('org.spockframework:spock-core:1.2-groovy-2.4')
+        testCompile('org.springframework:spring-test:4.3.1.RELEASE')
+        testRuntime "cglib:cglib-nodep:3.2.4"
     }
 
     task sourceJar(type: Jar) {
@@ -124,16 +162,57 @@ configure([globalModule, coreModule, webModule]) {
 
 configure([globalModule, coreModule, webModule]) {
     apply(plugin: 'groovy')
+    apply plugin: 'net.saliman.cobertura'
+    apply plugin: 'codenarc'
+
+    codenarc {
+        toolVersion = "0.24"
+        ignoreFailures = false
+        reportFormat = 'html'
+        reportsDir = new File("./build/reports/codenarc")
+    }
+
+    codenarcMain {
+        configFile = rootProject.file("config/codenarc/rulesMain.groovy")
+    }
+    codenarcTest {
+        configFile = rootProject.file("config/codenarc/rulesTests.groovy")
+    }
+
+
+    cobertura {
+        coverageFormats = ['html', 'xml']
+        coverageIgnoreTrivial = true
+        coverageIgnores = ['org.slf4j.Logger.*']
+        coverageReportDir = new File("$buildDir/reports/cobertura")
+
+        coverageExcludes = [
+                '.*Enum',
+        ]
+    }
+
+    test.finalizedBy(project.tasks.cobertura)
+    test.finalizedBy(project.tasks.coberturaCheck)
 
     sourceSets {
         main { groovy { srcDirs = ["src"] } }
         test { groovy { srcDirs = ["test"] } }
     }
+
+    sourceSets.main.output.classesDir = new File(project.buildDir, "classes/main")
+    sourceSets.test.output.classesDir = new File(project.buildDir, "classes/test")
+
 }
 
 configure(globalModule) {
     entitiesEnhancing {
-        main { enabled = true }
+        main {
+            enabled = true
+        }
+         test {
+            enabled = true
+            persistenceConfig = 'taggable-test-persistence.xml'
+        }
     }
 
     jar {
@@ -142,11 +221,18 @@ configure(globalModule) {
             attributes('App-Component-Version': cuba.artifact.version + (cuba.artifact.isSnapshot ? '-SNAPSHOT' : ''))
         }
     }
-
-    
 }
 
 configure(coreModule) {
+
+    entitiesEnhancing {
+        main { enabled = true }
+        test {
+            enabled = true
+            persistenceConfig = 'taggable-test-persistence.xml'
+        }
+
+    }
 
     configurations {
         jdbc
@@ -158,7 +244,6 @@ configure(coreModule) {
         provided(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
-
     }
 
     task cleanConf(description: 'Cleans up conf directory') {
@@ -177,6 +262,29 @@ configure(coreModule) {
         appJars(modulePrefix + '-global', modulePrefix + '-core')
     }
 
+
+    def hsqlDbName = 'ddct'
+    def hsqlPort = 9010
+
+    task startDb(description: 'Starts local HSQLDB server', type: CubaHsqlStart) {
+        dbPort = hsqlPort
+        dbName = hsqlDbName
+    }
+
+    task stopDb(description: 'Stops local HSQLDB server', type: CubaHsqlStop) {
+        dbPort = hsqlPort
+        dbName = hsqlDbName
+    }
+
+    task removeDb(description: 'Removes local HSQL database', type: Delete) {
+        delete new File("$rootProject.projectDir/data")
+    }
+
+    task killDb(description: "Kill local HSQLDB server process running on port $hsqlPort", type: CubaKillProcess) {
+        port = hsqlPort
+    }
+
+
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'hsql'
         host = 'localhost'
@@ -192,8 +300,17 @@ configure(coreModule) {
         dbUser = 'sa'
         dbPassword = ''
     }
+
+        task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
+        dbms = 'hsql'
+        host = "localhost:$hsqlPort"
+        dbName = hsqlDbName
+        dbUser = 'sa'
+        dbPassword = ''
+        //auxiliaryScript = file('test/de/diedavids/cuba/taggable/create-db.sql')
+    }
 }
-    
+
 configure(webModule) {
     configurations {
         webcontent
@@ -202,9 +319,8 @@ configure(webModule) {
     dependencies {
         provided(servletApi)
         compile(globalModule)
-
     }
-    
+
     task webArchive(type: Zip) {
         from file("$buildDir/web")
         from file('web')
@@ -243,10 +359,6 @@ configure(webModule) {
     }
 }
 
-
-
-
-
 task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/shared")
     delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core")
@@ -266,4 +378,9 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.3.1'
+}
+
+
+clean {
+    delete = ['build/libs', 'build/tmp']
 }
