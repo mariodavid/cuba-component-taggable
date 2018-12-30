@@ -14,6 +14,7 @@ This application component let's you enhance your entities with a generic taggin
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
+| 6.10.x           | 0.3.x          |
 | 6.9.x            | 0.1.x - 0.2.x  |
 
 
