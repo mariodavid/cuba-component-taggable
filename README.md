@@ -50,3 +50,13 @@ With that your `Customer` entity will be taggable and might look like the follow
 
 ### Example usage
 To see this application component in action, check out this example: [cuba-example-using-taggable](https://github.com/mariodavid/cuba-example-using-taggable).
+
+
+
+## Supported DBMS
+
+The following databases are supported by this application component:
+
+* HSQLDB
+* PostgreSQL
+* MySQL
