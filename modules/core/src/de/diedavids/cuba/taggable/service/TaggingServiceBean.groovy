@@ -12,14 +12,15 @@ import org.springframework.stereotype.Service
 import javax.inject.Inject
 
 @Service(TaggingService.NAME)
-public class TaggingServiceBean implements TaggingService {
+class TaggingServiceBean implements TaggingService {
 
 
     @Inject
     protected DataManager dataManager
 
     @Inject
-    protected Metadata metadata
+    protected     Metadata metadata
+    private static final String   TAGGING_VIEW_NAME = 'tagging-view'
 
     @Override
     void tagEntity(Entity entity, Collection<Tag> newTags, String persistentTaggableAttribute = null) {
@@ -56,7 +57,7 @@ public class TaggingServiceBean implements TaggingService {
     }
 
     private Tagging createTagging(Entity entity, Tag tag, String persistentTaggableAttribute) {
-        Tagging tagging = metadata.create(Tagging.class)
+        Tagging tagging = metadata.create(Tagging)
         tagging.setTag(tag)
         tagging.setTaggable(entity)
 
@@ -73,21 +74,21 @@ public class TaggingServiceBean implements TaggingService {
 
     @Override
     Collection<Entity> getEntitiesWithTag(Tag tag) {
-        return getTaggingsForTag(tag)*.taggable
+        getTaggingsForTag(tag)*.taggable
     }
 
     private List<Tagging> getTaggingsForEntity(Entity entity) {
         LoadContext.Query query = LoadContext.createQuery('select e from ddct$Tagging e where e.taggable = :taggable')
-        query.setParameter("taggable", entity, false)
-        LoadContext<Tagging> loadContext = LoadContext.create(Tagging.class)
-                .setQuery(query).setView("tagging-view")
+        query.setParameter('taggable', entity, false)
+        LoadContext<Tagging> loadContext = LoadContext.create(Tagging)
+                .setQuery(query).setView(TAGGING_VIEW_NAME)
         dataManager.loadList(loadContext)
     }
     private List<Tagging> getTaggingsForTag(Tag tag) {
         LoadContext.Query query = LoadContext.createQuery('select e from ddct$Tagging e where e.tag.id = :tag')
-        query.setParameter("tag", tag)
-        LoadContext<Tagging> loadContext = LoadContext.create(Tagging.class)
-                .setQuery(query).setView("tagging-view")
+        query.setParameter('tag', tag)
+        LoadContext<Tagging> loadContext = LoadContext.create(Tagging)
+                .setQuery(query).setView(TAGGING_VIEW_NAME)
         dataManager.loadList(loadContext)
     }
 }
