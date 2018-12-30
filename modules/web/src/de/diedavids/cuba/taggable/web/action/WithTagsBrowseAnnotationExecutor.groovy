@@ -18,6 +18,10 @@ import java.lang.annotation.Annotation
 @org.springframework.stereotype.Component('ddct$WithTagsBrowseAnnotationExecutor')
 class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithTags> {
 
+
+    private static final String CAPTION_MSG_KEY = 'column.tags'
+    private static final String ICON_KEY = 'font-icon:TAG'
+
     static final List<String> PRE_BUTTONS = [
             'createBtn',
             'editBtn',
@@ -74,7 +78,7 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
     }
 
     protected void addTagsColumnToTable(WithTags annotation, Table table) {
-        table.addGeneratedColumn(messages.getMainMessage("column.tags"), new Table.ColumnGenerator<Entity>() {
+        table.addGeneratedColumn(messages.getMainMessage(CAPTION_MSG_KEY), new Table.ColumnGenerator<Entity>() {
             @Override
             Component generateCell(Entity entity) {
                 Collection<Tag> tags = taggingService.getTags(entity)
@@ -97,9 +101,9 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
     protected Component createComponentForTag(WithTags annotation,Tag tag, Frame frame) {
         if (annotation.showTagsAsLink()) {
             LinkButton tagComponent = (LinkButton) componentsFactory.createComponent(LinkButton.NAME)
-            tagComponent.caption = tag.getValue()
-            tagComponent.icon = "font-icon:TAG"
-            tagComponent.action = new BaseAction("openTag") {
+            tagComponent.caption = tag.value
+            tagComponent.icon = ICON_KEY
+            tagComponent.action = new BaseAction('openTag') {
                 @Override
                 void actionPerform(Component component) {
                     def openType = WindowManager.OpenType.valueOf(annotation.tagLinkOpenType())
@@ -111,8 +115,8 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
         }
         else {
             Label tagComponent = (Label) componentsFactory.createComponent(Label.NAME)
-            tagComponent.value = tag.getValue()
-            tagComponent.icon = "font-icon:TAG"
+            tagComponent.value = tag.value
+            tagComponent.icon = ICON_KEY
             tagComponent
             
         }

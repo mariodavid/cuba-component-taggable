@@ -1,7 +1,6 @@
 package de.diedavids.cuba.taggable.web.tag
 
 import com.haulmont.cuba.core.entity.Entity
-import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.WindowManager.OpenType
 import com.haulmont.cuba.gui.WindowParam
 import com.haulmont.cuba.gui.components.AbstractEditor
@@ -21,13 +20,14 @@ class TagEdit extends AbstractEditor<Tag> {
     @Override
     protected void postInit() {
         super.postInit()
-        caption = formatMessage("editorCaption", item.value)
+        caption = formatMessage('editorCaption', item.value)
 
         entitiesWithTagDs.refresh([tag: item])
 
     }
 
+    @SuppressWarnings('UnusedMethodParameter')
     void openEntity(Entity item, String columnId) {
-        openEditor(item.getValue("entity") as Entity, tagLinkOpenType)
+        openEditor(item.getValue('entity') as Entity, tagLinkOpenType)
     }
 }
