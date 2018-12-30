@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.9.2'
+    ext.cubaVersion = '6.10.6'
     repositories {
         
         maven {
@@ -89,8 +89,8 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.6.0")
-    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.3.2")
+    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.7.0")
+    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.4.0")
 
 }
 
@@ -126,7 +126,9 @@ configure([globalModule, coreModule, webModule]) {
 }
 
 configure(globalModule) {
-    task enhance(type: CubaEnhancing)
+    entitiesEnhancing {
+        main { enabled = true }
+    }
 
     jar {
         manifest {
