@@ -20,6 +20,12 @@ buildscript {
     }
 }
 
+
+plugins {
+    id 'net.researchgate.release' version '2.6.0'
+}
+
+
 def modulePrefix = 'taggable'
 
 def globalModule = project(":${modulePrefix}-global")
