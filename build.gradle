@@ -1,7 +1,8 @@
 
 buildscript {
-    ext.cubaVersion = '6.10.4'
+    ext.cubaVersion = '7.0.1'
     repositories {
+        mavenLocal()
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
@@ -37,7 +38,6 @@ def webModule = project(":${modulePrefix}-web")
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
-apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 cuba {
@@ -97,8 +97,8 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.7.0")
-    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.4.0")
+    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.8.0")
+    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.5.0-SNAPSHOT")
 
 }
 
@@ -138,7 +138,6 @@ test.finalizedBy(project.tasks.coberturaCheck)
 configure([globalModule, coreModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'idea')
     apply(plugin: 'cuba')
 
     dependencies {
@@ -205,6 +204,12 @@ configure([globalModule, coreModule, webModule]) {
 }
 
 configure(globalModule) {
+    dependencies {
+        if (!JavaVersion.current().isJava8()) {
+            runtime('javax.xml.bind:jaxb-api:2.3.1')
+            runtime('org.glassfish.jaxb:jaxb-runtime:2.3.1')
+        }
+    }
     entitiesEnhancing {
         main {
             enabled = true
@@ -241,7 +246,7 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        provided(servletApi)
+        compileOnly(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
     }
@@ -317,7 +322,7 @@ configure(webModule) {
     }
 
     dependencies {
-        provided(servletApi)
+        compileOnly(servletApi)
         compile(globalModule)
     }
 
@@ -374,10 +379,6 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
         }
         start.execute()
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
 }
 
 
