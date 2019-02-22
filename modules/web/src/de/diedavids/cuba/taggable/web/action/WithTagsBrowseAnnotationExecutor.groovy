@@ -2,6 +2,7 @@ package de.diedavids.cuba.taggable.web.action
 
 import com.haulmont.cuba.core.entity.Entity
 import com.haulmont.cuba.core.global.Messages
+import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.components.actions.BaseAction
@@ -36,7 +37,7 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
     ButtonsPanelHelper buttonsPanelHelper
 
     @Inject
-    protected ComponentsFactory componentsFactory
+    protected UiComponents uiComponents
 
     @Inject
     protected TaggingService taggingService
@@ -82,7 +83,7 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
             @Override
             Component generateCell(Entity entity) {
                 Collection<Tag> tags = taggingService.getTags(entity)
-                Component.Container layout = createContainerComponentForTags()
+                ComponentContainer layout = createContainerComponentForTags()
                 for (Tag tag : tags) {
                     layout.add(createComponentForTag(annotation, tag, table.frame))
                 }
@@ -92,15 +93,15 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
         })
     }
 
-    protected Component.Container createContainerComponentForTags() {
-        HBoxLayout layout = (HBoxLayout) componentsFactory.createComponent(HBoxLayout.NAME)
+    protected ComponentContainer createContainerComponentForTags() {
+        HBoxLayout layout = (HBoxLayout) uiComponents.create(HBoxLayout.NAME)
         layout.setSpacing(true)
         layout
     }
 
     protected Component createComponentForTag(WithTags annotation,Tag tag, Frame frame) {
         if (annotation.showTagsAsLink()) {
-            LinkButton tagComponent = (LinkButton) componentsFactory.createComponent(LinkButton.NAME)
+            LinkButton tagComponent = (LinkButton) uiComponents.create(LinkButton.NAME)
             tagComponent.caption = tag.value
             tagComponent.icon = ICON_KEY
             tagComponent.action = new BaseAction('openTag') {
@@ -114,7 +115,7 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
             
         }
         else {
-            Label tagComponent = (Label) componentsFactory.createComponent(Label.NAME)
+            Label tagComponent = (Label) uiComponents.create(Label.NAME)
             tagComponent.value = tag.value
             tagComponent.icon = ICON_KEY
             tagComponent

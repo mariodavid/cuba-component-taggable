@@ -144,7 +144,7 @@ configure([globalModule, coreModule, webModule]) {
         testCompile('junit:junit:4.12')
         testCompile 'org.assertj:assertj-core:2.9.0'
 
-        testCompile('org.spockframework:spock-core:1.2-groovy-2.4')
+        testCompile('org.spockframework:spock-core:1.2-groovy-2.5')
         testCompile('org.springframework:spring-test:4.3.1.RELEASE')
         testRuntime "cglib:cglib-nodep:3.2.4"
     }
@@ -216,7 +216,7 @@ configure(globalModule) {
         }
          test {
             enabled = true
-            persistenceConfig = 'taggable-test-persistence.xml'
+            //persistenceConfig = 'taggable-test-persistence.xml'
         }
     }
 
@@ -234,7 +234,7 @@ configure(coreModule) {
         main { enabled = true }
         test {
             enabled = true
-            persistenceConfig = 'taggable-test-persistence.xml'
+            //persistenceConfig = 'taggable-test-persistence.xml'
         }
 
     }

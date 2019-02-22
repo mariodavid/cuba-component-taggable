@@ -19,8 +19,8 @@ class TaggingServiceBean implements TaggingService {
     protected DataManager dataManager
 
     @Inject
-    protected     Metadata metadata
-    private static final String   TAGGING_VIEW_NAME = 'tagging-view'
+    protected Metadata metadata
+    private static final String TAGGING_VIEW_NAME = 'tagging-view'
 
     @Override
     void tagEntity(Entity entity, Collection<Tag> newTags, String persistentTaggableAttribute = null) {
@@ -74,18 +74,21 @@ class TaggingServiceBean implements TaggingService {
 
     @Override
     Collection<Entity> getEntitiesWithTag(Tag tag) {
-        getTaggingsForTag(tag)*.taggable
+        getTaggingsForTag(tag)*.taggable.findAll { it != null }
     }
 
-    private List<Tagging> getTaggingsForEntity(Entity entity) {
+    @Override
+    Collection<Tagging> getTaggingsForEntity(Entity entity) {
         LoadContext.Query query = LoadContext.createQuery('select e from ddct$Tagging e where e.taggable = :taggable')
-        query.setParameter('taggable', entity, false)
+        query.setParameter('taggable', entity)
         LoadContext<Tagging> loadContext = LoadContext.create(Tagging)
                 .setQuery(query).setView(TAGGING_VIEW_NAME)
         dataManager.loadList(loadContext)
     }
+
+
     private List<Tagging> getTaggingsForTag(Tag tag) {
-        LoadContext.Query query = LoadContext.createQuery('select e from ddct$Tagging e where e.tag.id = :tag')
+        LoadContext.Query query = LoadContext.createQuery('select e from ddct$Tagging e where e.tag = :tag')
         query.setParameter('tag', tag)
         LoadContext<Tagging> loadContext = LoadContext.create(Tagging)
                 .setQuery(query).setView(TAGGING_VIEW_NAME)
