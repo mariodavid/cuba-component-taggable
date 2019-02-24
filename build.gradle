@@ -59,8 +59,8 @@ subprojects {
     apply plugin: 'com.jfrog.bintray'
 
     bintray {
-        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('UPLOAD_REPOSITORY_USERNAME')
-        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('UPLOAD_REPOSITORY_PASSWORD')
+        user = System.getenv('BINTRAY_USERNAME')
+        key = System.getenv('BINTRAY_PASSWORD')
 
         configurations = ['archives']
 
@@ -98,7 +98,7 @@ subprojects {
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
     appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.8.0")
-    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.5.0-SNAPSHOT")
+    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.5.0")
 
 }
 
