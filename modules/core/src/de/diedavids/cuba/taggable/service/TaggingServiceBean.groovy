@@ -24,12 +24,29 @@ class TaggingServiceBean implements TaggingService {
 
     @Override
     void tagEntity(Entity entity, Collection<Tag> newTags, String persistentTaggableAttribute = null) {
+        setTagsForEntity(entity, newTags, persistentTaggableAttribute)
+    }
 
+
+    @Override
+    void setTagsForEntity(Entity entity, Collection<Tag> newTags, String persistentTaggableAttribute = null) {
         CommitContext commitContext = new CommitContext()
 
         def existingTags = getTags(entity)
 
-        addTagsToAddToCommitContext(newTags, existingTags, entity, persistentTaggableAttribute, commitContext)
+        addTagsToAddToCommitContext(newTags, existingTags, entity, persistentTaggableAttribute, null, commitContext)
+        addTagsToRemoveToCommitContext(existingTags, newTags, entity, commitContext)
+
+        dataManager.commit(commitContext)
+    }
+
+    @Override
+    void setTagsForEntityWithContext(Entity entity, Collection<Tag> newTags, String tagContext) {
+        CommitContext commitContext = new CommitContext()
+
+        def existingTags = getTagsWithContext(entity, tagContext)
+        String persistentTaggableAttribute = null
+        addTagsToAddToCommitContext(newTags, existingTags, entity, persistentTaggableAttribute, tagContext, commitContext)
         addTagsToRemoveToCommitContext(existingTags, newTags, entity, commitContext)
 
 
@@ -44,10 +61,10 @@ class TaggingServiceBean implements TaggingService {
         }
     }
 
-    private void addTagsToAddToCommitContext(Collection<Tag> newTags, Collection<Tag> existingTags, Entity entity, String persistentTaggableAttribute, commitContext) {
+    private void addTagsToAddToCommitContext(Collection<Tag> newTags, Collection<Tag> existingTags, Entity entity, String persistentTaggableAttribute, String tagContext, CommitContext commitContext) {
         def tagsToAdd = newTags - existingTags
         tagsToAdd.each { tagToAdd ->
-            Tagging tagging = createTagging(entity, tagToAdd, persistentTaggableAttribute)
+            Tagging tagging = createTagging(entity, tagToAdd, persistentTaggableAttribute, tagContext)
             commitContext.addInstanceToCommit(tagging)
         }
     }
@@ -56,9 +73,10 @@ class TaggingServiceBean implements TaggingService {
         taggings.find { it.tag == tagToRemove }
     }
 
-    private Tagging createTagging(Entity entity, Tag tag, String persistentTaggableAttribute) {
+    private Tagging createTagging(Entity entity, Tag tag, String persistentTaggableAttribute, String tagContext) {
         Tagging tagging = metadata.create(Tagging)
         tagging.setTag(tag)
+        tagging.setContext(tagContext)
         tagging.setTaggable(entity)
 
         if (persistentTaggableAttribute) {
@@ -69,7 +87,16 @@ class TaggingServiceBean implements TaggingService {
 
     @Override
     Collection<Tag> getTags(Entity entity) {
-        getTaggingsForEntity(entity)*.tag
+        getTaggingsForEntityWithContext(entity, null)*.tag
+    }
+
+    @Override
+    Collection<Tag> getTagsWithContext(Entity entity, String tagContext) {
+        return getTaggingsForEntityWithContext(entity, tagContext)*.tag
+    }
+
+    private Collection<Tagging> getTaggingsForEntityWithContext(Entity entity, String tagContext) {
+        getTaggingsForEntity(entity).findAll { it.context == tagContext }
     }
 
     @Override
@@ -94,4 +121,5 @@ class TaggingServiceBean implements TaggingService {
                 .setQuery(query).setView(TAGGING_VIEW_NAME)
         dataManager.loadList(loadContext)
     }
+
 }
