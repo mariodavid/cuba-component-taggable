@@ -15,6 +15,7 @@ public interface TaggingService {
     void tagEntity(Entity entity, Collection<Tag> tags, String persistentTaggableAttribute);
 
     Collection<Tag> getTags(Entity entity);
+
     Collection<Entity> getEntitiesWithTag(Tag tag);
 
     Collection<Tagging> getTaggingsForEntity(Entity entity);

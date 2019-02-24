@@ -14,13 +14,13 @@ public class DdctTestContainer extends TestContainer {
     public DdctTestContainer() {
         super();
         appComponents = new ArrayList<>(Arrays.asList(
-                "com.haulmont.cuba"
+                "com.haulmont.cuba",
                 // add CUBA premium add-ons here
                 // "com.haulmont.bpm",
                 // "com.haulmont.charts",
                 // "com.haulmont.fts",
                 // "com.haulmont.reports",
-                // and custom app components if any
+                "de.diedavids.cuba.entitysoftreference"
         ));
         appPropertiesFiles = Arrays.asList(
                 // List the files defined in your web.xml
@@ -29,7 +29,7 @@ public class DdctTestContainer extends TestContainer {
                 // Add this file which is located in CUBA and defines some properties
                 // specifically for test environment. You can replace it with your own
                 // or add another one in the end.
-                "test-app.properties");
+                "com/haulmont/cuba/testsupport/test-app.properties");
         initDbProperties();
     }
 
