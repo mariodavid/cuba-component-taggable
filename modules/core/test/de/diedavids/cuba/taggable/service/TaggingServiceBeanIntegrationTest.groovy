@@ -56,16 +56,16 @@ class TaggingServiceBeanIntegrationTest extends AbstractDbIntegrationTest{
 
         //and:
         def globalContextTags = taggingService.getTags(admin)
-        def sizeContextTags = taggingService.getTagsWithContext(admin, "size")
+        def sizeTags = taggingService.getTagsWithContext(admin, "size")
 
         //then:
         assertThat(globalContextTags).hasSize(1)
         assertThat(globalContextTags).contains(cool)
 
         //and:
-        assertThat(sizeContextTags).hasSize(2)
-        assertThat(sizeContextTags).contains(small)
-        assertThat(sizeContextTags).contains(tall)
+        assertThat(sizeTags).hasSize(2)
+        assertThat(sizeTags).contains(small)
+        assertThat(sizeTags).contains(tall)
     }
 
     @Test
@@ -76,13 +76,15 @@ class TaggingServiceBeanIntegrationTest extends AbstractDbIntegrationTest{
         taggingService.setTagsForEntityWithContext(admin, [small, tall], "size")
 
         //then:
-        assertThat(taggingService.getTagsWithContext(admin, "coolness")).hasSize(1)
-        assertThat(taggingService.getTagsWithContext(admin, "coolness")).contains(cool)
+        def coolnessTags = taggingService.getTagsWithContext(admin, "coolness")
+        assertThat(coolnessTags).hasSize(1)
+        assertThat(coolnessTags).contains(cool)
 
         //and:
-        assertThat(taggingService.getTagsWithContext(admin, "size")).hasSize(2)
-        assertThat(taggingService.getTagsWithContext(admin, "size")).contains(small)
-        assertThat(taggingService.getTagsWithContext(admin, "size")).contains(tall)
+        def sizeTags = taggingService.getTagsWithContext(admin, "size")
+        assertThat(sizeTags).hasSize(2)
+        assertThat(sizeTags).contains(small)
+        assertThat(sizeTags).contains(tall)
     }
 
     @Test
@@ -114,7 +116,9 @@ class TaggingServiceBeanIntegrationTest extends AbstractDbIntegrationTest{
 
     private Tag tag(String value) {
         def tag = metadata.create(Tag)
+
         tag.value = value
+
         dataManager.commit(tag)
     }
 
@@ -125,6 +129,4 @@ class TaggingServiceBeanIntegrationTest extends AbstractDbIntegrationTest{
                 .parameter("username", username)
                 .one()
     }
-
-
 }

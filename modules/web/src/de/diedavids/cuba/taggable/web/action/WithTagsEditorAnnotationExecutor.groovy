@@ -28,7 +28,7 @@ class WithTagsEditorAnnotationExecutor implements EditorAnnotationExecutor<WithT
     @Override
     void init(WithTags annotation, Window.Editor editor, Map<String, Object> params) {
         Button button = buttonsPanelHelper.getOrCreateButton(editor, annotation.buttonId(), annotation.buttonsPanel())
-        button.action = new EditorWithTagsAction(editor)
+        button.action = new EditorWithTagsAction(editor, annotation.persistentAttribute(), annotation.tagContext())
     }
 
     @Override

@@ -52,7 +52,7 @@ ruleset {
     ClassNameSameAsSuperclass { priority = 1 }
     AssignCollectionSort { priority = 1 }
     AssignCollectionUnique { priority = 1 }
-    ParameterCount { maxParameters = 5 }
+    ParameterCount { maxParameters = 6 }
     CollectAllIsDeprecated { priority = 1 }
     ConfusingMultipleReturns { priority = 1 }
     ExplicitArrayListInstantiation { priority = 1 }

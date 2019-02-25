@@ -6,7 +6,6 @@ import com.haulmont.cuba.gui.UiComponents
 import com.haulmont.cuba.gui.WindowManager
 import com.haulmont.cuba.gui.components.*
 import com.haulmont.cuba.gui.components.actions.BaseAction
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory
 import de.balvi.cuba.declarativecontrollers.web.annotationexecutor.browse.BrowseAnnotationExecutor
 import de.balvi.cuba.declarativecontrollers.web.helper.ButtonsPanelHelper
 import de.diedavids.cuba.taggable.entity.Tag
@@ -57,7 +56,7 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
     void init(WithTags annotation, Window.Lookup browse, Map<String, Object> params) {
         ListComponent listComponent = getListComponent(browse, annotation)
 
-        def action = new TableWithTagsAction(listComponent, annotation.persistentAttribute())
+        def action = new TableWithTagsAction(listComponent, annotation.persistentAttribute(), annotation.tagContext())
         listComponent.addAction(action)
         if (annotation.buttonsPanel()) {
             ButtonsPanel buttonsPanel = browse.getComponent(annotation.buttonsPanel()) as ButtonsPanel
@@ -82,7 +81,7 @@ class WithTagsBrowseAnnotationExecutor implements BrowseAnnotationExecutor<WithT
         table.addGeneratedColumn(messages.getMainMessage(CAPTION_MSG_KEY), new Table.ColumnGenerator<Entity>() {
             @Override
             Component generateCell(Entity entity) {
-                Collection<Tag> tags = taggingService.getTags(entity)
+                Collection<Tag> tags = taggingService.getTagsWithContext(entity, annotation.tagContext())
                 ComponentContainer layout = createContainerComponentForTags()
                 for (Tag tag : tags) {
                     layout.add(createComponentForTag(annotation, tag, table.frame))

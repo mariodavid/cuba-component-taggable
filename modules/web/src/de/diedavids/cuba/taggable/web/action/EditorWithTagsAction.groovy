@@ -13,24 +13,26 @@ class EditorWithTagsAction extends AbstractAction implements Action.HasOpenType 
 
     WithTagsBean withTagsBean = AppBeans.<WithTagsBean> get(WithTagsBean)
     String persistentAttribute = null
+    String tagContext = null
     WindowManager.OpenType openType
 
     protected Window.Editor editor
 
-    EditorWithTagsAction(Window.Editor editor) {
-        this(WithTagsBean.ACTION_ID, editor)
+    EditorWithTagsAction(Window.Editor editor, String persistentAttribute, String tagContext) {
+        this(WithTagsBean.ACTION_ID, editor, persistentAttribute, tagContext)
     }
 
-    EditorWithTagsAction(String id, Window.Editor editor) {
+    EditorWithTagsAction(String id, Window.Editor editor, String persistentAttribute, String tagContext) {
         super(id)
         this.editor = editor
         withTagsBean.setIcon(this)
         withTagsBean.setCaption(this)
         this.persistentAttribute = persistentAttribute
+        this.tagContext = tagContext
     }
 
     @Override
     void actionPerform(Component component) {
-        withTagsBean.openTagAssignment(editor, persistentAttribute)
+        withTagsBean.openTagAssignment(editor, persistentAttribute, tagContext)
     }
 }
