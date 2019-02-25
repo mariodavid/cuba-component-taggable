@@ -10,6 +10,7 @@ create table DDCT_TAG (
     DELETED_BY varchar(50),
     --
     VALUE_ varchar(255) not null,
+    CONTEXT varchar(255),
     --
     primary key (ID)
 )^

@@ -39,7 +39,19 @@ public class TagAssignment extends AbstractWindow {
 
     @Override
     public void ready() {
+
         taggableTagsDs.refresh(ParamsMap.of("entity", taggable, "tagContext", tagContext));
+
+
+        if (!StringUtils.isEmpty(tagContext)) {
+            allTagsDs.setQuery("select e from ddct$Tag e where e.context = :custom$tagContext");
+
+        }
+        else {
+            allTagsDs.setQuery("select e from ddct$Tag e where e.context is null");
+        }
+        allTagsDs.refresh(ParamsMap.of("tagContext", tagContext));
+
     }
 
     public void commitAndClose() {
