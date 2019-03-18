@@ -1,7 +1,7 @@
-
 buildscript {
     ext.cubaVersion = '7.0.1'
     repositories {
+
         mavenLocal()
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
@@ -10,7 +10,7 @@ buildscript {
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
-        
+
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -166,10 +166,10 @@ configure([globalModule, coreModule, webModule]) {
     apply plugin: 'codenarc'
 
     codenarc {
-        toolVersion = "0.24"
+        toolVersion = "1.3"
         ignoreFailures = false
         reportFormat = 'html'
-        reportsDir = new File("./build/reports/codenarc")
+        reportsDir = project.file("build/reports/codenarc")
     }
 
     codenarcMain {
@@ -292,28 +292,28 @@ configure(coreModule) {
 
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
-        dbms = 'hsql'
-        host = 'localhost'
         dbName = 'ddct'
+        dbms = 'hsql'
+        host = "localhost:$hsqlPort"
         dbUser = 'sa'
         dbPassword = ''
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
-        dbms = 'hsql'
-        host = 'localhost'
         dbName = 'ddct'
+        dbms = 'hsql'
+        host = "localhost:$hsqlPort"
         dbUser = 'sa'
         dbPassword = ''
     }
 
     task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
         dbms = 'hsql'
-        host = "localhost"
-        dbName = "ddct-test"
+        host = "localhost:$hsqlPort"
+        dbName = "ddct"
         dbUser = 'sa'
         dbPassword = ''
-        //auxiliaryScript = file('test/de/diedavids/cuba/taggable/create-db.sql')
+        auxiliaryScript = file('test/de/diedavids/cuba/taggable/create-db.sql')
     }
 }
 
@@ -364,6 +364,10 @@ configure(webModule) {
         appJars(modulePrefix + '-global', modulePrefix + '-web')
     }
 }
+
+
+
+
 
 task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/shared")

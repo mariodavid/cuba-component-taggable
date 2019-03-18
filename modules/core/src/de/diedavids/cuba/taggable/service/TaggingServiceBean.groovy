@@ -95,11 +95,11 @@ class TaggingServiceBean implements TaggingService {
 
     @Override
     Collection<Tag> getTagsWithContext(Entity entity, String tagContext) {
-        if (!tagContext) {
-            getTaggingsForEntityWithContext(entity, null)*.tag
+        if (tagContext) {
+            getTaggingsForEntityWithContext(entity, tagContext)*.tag
         }
         else {
-            getTaggingsForEntityWithContext(entity, tagContext)*.tag
+            getTaggingsForEntityWithContext(entity, null)*.tag
         }
 
     }
