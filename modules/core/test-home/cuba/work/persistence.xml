@@ -56,6 +56,7 @@
     <class>com.haulmont.cuba.core.entity.JmxInstance</class>
     <class>com.haulmont.cuba.security.entity.RememberMeToken</class>
     <class>com.haulmont.cuba.core.entity.ReferenceToEntity</class>
+    <class>de.diedavids.cuba.entitysoftreference.EntitySoftReferenceConverter</class>
     <class>de.diedavids.cuba.taggable.entity.Tag</class>
     <class>de.diedavids.cuba.taggable.entity.Tagging</class>
     <exclude-unlisted-classes/>
@@ -64,6 +65,7 @@
       <property name="eclipselink.session-event-listener" value="com.haulmont.cuba.core.sys.persistence.EclipseLinkSessionEventListener"/>
       <property name="eclipselink.logging.logger" value="com.haulmont.cuba.core.sys.logging.EclipseLinkLog"/>
       <property name="eclipselink.cache.shared.default" value="false"/>
+      <property name="eclipselink.flush-clear.cache" value="Merge"/>
       <property name="eclipselink.target-database" value="com.haulmont.cuba.core.sys.persistence.CubaHSQLPlatform"/>
       <property name="javax.persistence.validation.mode" value="NONE"/>
       <property name="eclipselink.cache.coordination.protocol" value="com.haulmont.cuba.core.sys.entitycache.EntityCacheTransportManager"/>

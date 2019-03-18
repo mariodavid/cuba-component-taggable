@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
 public @interface WithTags {
     String listComponent() default "";
     String persistentAttribute() default "";
+    String tagContext() default "";
     String buttonId() default "tagsBtn";
     String buttonsPanel() default "buttonsPanel";
     boolean showTagsInList() default false;

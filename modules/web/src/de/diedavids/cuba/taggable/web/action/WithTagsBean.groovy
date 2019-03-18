@@ -32,11 +32,11 @@ class WithTagsBean {
     action.setIcon(ICON_KEY)
   }
 
-  void openTagAssignment(ListComponent target, String persistentAttribute) {
+  void openTagAssignment(ListComponent target, String persistentAttribute, String tagContext) {
     AbstractWindow assignTagsWindow = (AbstractWindow) target.frame.openWindow(
         SCREEN_ID_TAG_ASSIGNMENT,
         WindowManager.OpenType.DIALOG,
-        getScreenParams(target.singleSelected, persistentAttribute)
+        getScreenParams(target.singleSelected, persistentAttribute, tagContext)
     )
 
     assignTagsWindow.addCloseWithCommitListener {
@@ -44,20 +44,25 @@ class WithTagsBean {
     }
   }
 
-  void openTagAssignment(Window.Editor editor, String persistentAttribute) {
+  void openTagAssignment(Window.Editor editor, String persistentAttribute, String tagContext) {
     editor.frame.openWindow(
         SCREEN_ID_TAG_ASSIGNMENT,
         WindowManager.OpenType.DIALOG,
-        getScreenParams(editor.item, persistentAttribute)
+        getScreenParams(editor.item, persistentAttribute, tagContext)
     )
   }
 
-  private Map<String, Object> getScreenParams(Entity item, String persistentAttribute) {
+  private Map<String, Object> getScreenParams(Entity item, String persistentAttribute, String tagContext) {
     def result = [:]
 
     result['taggable'] = item
+
     if (persistentAttribute) {
       result['persistentAttribute'] = persistentAttribute
+    }
+
+    if (tagContext) {
+      result['tagContext'] = tagContext
     }
 
     result

@@ -1,7 +1,8 @@
-
 buildscript {
-    ext.cubaVersion = '6.10.4'
+    ext.cubaVersion = '7.0.1'
     repositories {
+
+        mavenLocal()
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
             credentials {
@@ -9,7 +10,7 @@ buildscript {
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
         }
-        
+
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
@@ -37,7 +38,6 @@ def webModule = project(":${modulePrefix}-web")
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
-apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 cuba {
@@ -59,8 +59,8 @@ subprojects {
     apply plugin: 'com.jfrog.bintray'
 
     bintray {
-        user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('UPLOAD_REPOSITORY_USERNAME')
-        key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('UPLOAD_REPOSITORY_PASSWORD')
+        user = System.getenv('BINTRAY_USERNAME')
+        key = System.getenv('BINTRAY_PASSWORD')
 
         configurations = ['archives']
 
@@ -97,8 +97,8 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.7.0")
-    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.4.0")
+    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.8.0")
+    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.5.0")
 
 }
 
@@ -138,14 +138,14 @@ test.finalizedBy(project.tasks.coberturaCheck)
 configure([globalModule, coreModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'idea')
     apply(plugin: 'cuba')
 
     dependencies {
+
         testCompile('junit:junit:4.12')
         testCompile 'org.assertj:assertj-core:2.9.0'
 
-        testCompile('org.spockframework:spock-core:1.2-groovy-2.4')
+        testCompile('org.spockframework:spock-core:1.2-groovy-2.5')
         testCompile('org.springframework:spring-test:4.3.1.RELEASE')
         testRuntime "cglib:cglib-nodep:3.2.4"
     }
@@ -166,10 +166,10 @@ configure([globalModule, coreModule, webModule]) {
     apply plugin: 'codenarc'
 
     codenarc {
-        toolVersion = "0.24"
+        toolVersion = "1.3"
         ignoreFailures = false
         reportFormat = 'html'
-        reportsDir = new File("./build/reports/codenarc")
+        reportsDir = project.file("build/reports/codenarc")
     }
 
     codenarcMain {
@@ -205,13 +205,19 @@ configure([globalModule, coreModule, webModule]) {
 }
 
 configure(globalModule) {
+    dependencies {
+        if (!JavaVersion.current().isJava8()) {
+            runtime('javax.xml.bind:jaxb-api:2.3.1')
+            runtime('org.glassfish.jaxb:jaxb-runtime:2.3.1')
+        }
+    }
     entitiesEnhancing {
         main {
             enabled = true
         }
          test {
             enabled = true
-            persistenceConfig = 'taggable-test-persistence.xml'
+            //persistenceConfig = 'taggable-test-persistence.xml'
         }
     }
 
@@ -229,7 +235,7 @@ configure(coreModule) {
         main { enabled = true }
         test {
             enabled = true
-            persistenceConfig = 'taggable-test-persistence.xml'
+            //persistenceConfig = 'taggable-test-persistence.xml'
         }
 
     }
@@ -241,7 +247,7 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
-        provided(servletApi)
+        compileOnly(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
     }
@@ -286,28 +292,28 @@ configure(coreModule) {
 
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
-        dbms = 'hsql'
-        host = 'localhost'
         dbName = 'ddct'
+        dbms = 'hsql'
+        host = "localhost:$hsqlPort"
         dbUser = 'sa'
         dbPassword = ''
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
-        dbms = 'hsql'
-        host = 'localhost'
         dbName = 'ddct'
+        dbms = 'hsql'
+        host = "localhost:$hsqlPort"
         dbUser = 'sa'
         dbPassword = ''
     }
 
-        task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
+    task createTestDb(dependsOn: assembleDbScripts, description: 'Creates local HSQL database', type: CubaDbCreation) {
         dbms = 'hsql'
         host = "localhost:$hsqlPort"
-        dbName = hsqlDbName
+        dbName = "ddct"
         dbUser = 'sa'
         dbPassword = ''
-        //auxiliaryScript = file('test/de/diedavids/cuba/taggable/create-db.sql')
+        auxiliaryScript = file('test/de/diedavids/cuba/taggable/create-db.sql')
     }
 }
 
@@ -317,7 +323,7 @@ configure(webModule) {
     }
 
     dependencies {
-        provided(servletApi)
+        compileOnly(servletApi)
         compile(globalModule)
     }
 
@@ -359,6 +365,10 @@ configure(webModule) {
     }
 }
 
+
+
+
+
 task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/shared")
     delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core")
@@ -374,10 +384,6 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
         }
         start.execute()
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
 }
 
 

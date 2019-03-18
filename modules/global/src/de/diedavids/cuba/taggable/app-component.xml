@@ -5,6 +5,7 @@
             name="global">
         <artifact appJar="true"
                   name="taggable-global"/>
+        <artifact name="taggable-core" classifier="db" ext="zip" configuration="dbscripts"/>
         <property name="cuba.persistenceConfig"
                   value="+de/diedavids/cuba/taggable/persistence.xml"/>
         <property name="cuba.metadataConfig"

@@ -16,6 +16,7 @@ public class TagsCollectionDatasource extends CustomCollectionDatasource<Tag, UU
     @Override
     protected Collection<Tag> getEntities(Map<String, Object> params) {
         Entity entity = (Entity) params.get("entity");
-        return taggingService.getTags(entity);
+        String tagContext = (String) params.get("tagContext");
+        return taggingService.getTagsWithContext(entity, tagContext);
     }
 }

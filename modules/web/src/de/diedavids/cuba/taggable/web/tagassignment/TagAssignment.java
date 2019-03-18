@@ -9,6 +9,7 @@ import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import de.diedavids.cuba.taggable.entity.Tag;
 import de.diedavids.cuba.taggable.service.TaggingService;
+import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -30,16 +31,37 @@ public class TagAssignment extends AbstractWindow {
     @WindowParam
     String persistentAttribute;
 
+    @WindowParam
+    String tagContext;
+
     @Inject
     protected Metadata metadata;
 
     @Override
     public void ready() {
-        taggableTagsDs.refresh(ParamsMap.of("entity", taggable));
+
+        taggableTagsDs.refresh(ParamsMap.of("entity", taggable, "tagContext", tagContext));
+
+
+        if (!StringUtils.isEmpty(tagContext)) {
+            allTagsDs.setQuery("select e from ddct$Tag e where e.context = :custom$tagContext");
+
+        }
+        else {
+            allTagsDs.setQuery("select e from ddct$Tag e where e.context is null");
+        }
+        allTagsDs.refresh(ParamsMap.of("tagContext", tagContext));
+
     }
 
     public void commitAndClose() {
-        taggingService.tagEntity(taggable, taggableTagsDs.getItems(), persistentAttribute);
+        if (StringUtils.isEmpty(tagContext)) {
+            taggingService.setTagsForEntity(taggable, taggableTagsDs.getItems(), persistentAttribute);
+        }
+        else {
+            taggingService.setTagsForEntityWithContext(taggable, taggableTagsDs.getItems(), persistentAttribute, tagContext);
+        }
+
         close(COMMIT_ACTION_ID);
     }
 
@@ -50,6 +72,8 @@ public class TagAssignment extends AbstractWindow {
     public void createTag() {
 
         Tag newTag = metadata.create(Tag.class);
+
+        newTag.setContext(tagContext);
 
         openEditor("ddct$Tag.create", newTag, WindowManager.OpenType.DIALOG)
             .addCloseWithCommitListener(() -> {
