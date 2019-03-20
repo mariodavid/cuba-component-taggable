@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [0.4.0] - 2019-03-19
+
+### Added
+- persistent tagging support for JPA linking to `Tag` entity (see README.md)
+- tag context to scope the tagging functionality to a specific dimension (see README.md)
+- CUBA 7 screen API support (`WithTag`
+### Dependencies
+- CUBA 7.0.x
+- declarative controllers 0.8.0
+- entity-soft-reference 0.5.0
+
+
 ## [0.3.0] - 2018-12-30
 
 ### Added
