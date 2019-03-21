@@ -113,23 +113,12 @@ public interface WithTagsSupport {
         initButtonWithTagsFunctionality(screen, button);
     }
 
-    default Button createOrGetButton(Screen screen) {
-        BeanLocator beanLocator = getBeanLocator(screen);
-        ButtonsPanelHelper buttonsPanelHelper = beanLocator.get(ButtonsPanelHelper.NAME);
-
-        return buttonsPanelHelper.createButton(getButtonId(), getButtonsPanel(), Collections.emptyList());
-    }
-
-    default BeanLocator getBeanLocator(Screen screen) {
-        return Extensions.getBeanLocator(screen);
-    }
-
     default void initButtonWithTagsFunctionality(Screen screen, Button button) {
 
         WithTagsSupportExecution withTagsBean = getBeanLocator(screen).get(WithTagsSupportExecution.class);
         Messages messages = getBeanLocator(screen).get(Messages.class);
 
-        ListAction tagsAction = new ItemTrackingAction("tagsAction")
+        ListAction tagsAction = new ItemTrackingAction(getListComponent(), "tagsAction")
                 .withPrimary(true)
                 .withIcon(ICON_KEY)
                 .withCaption(messages.getMainMessage(BUTTON_MSG_KEY))
@@ -142,6 +131,14 @@ public interface WithTagsSupport {
 
         button.setAction(tagsAction);
 
+    }
+
+
+    default Button createOrGetButton(Screen screen) {
+        BeanLocator beanLocator = getBeanLocator(screen);
+        ButtonsPanelHelper buttonsPanelHelper = beanLocator.get(ButtonsPanelHelper.NAME);
+
+        return buttonsPanelHelper.createButton(getButtonId(), getButtonsPanel(), Collections.emptyList());
     }
 
 
@@ -167,6 +164,11 @@ public interface WithTagsSupport {
                 return layout;
             });
         }
+    }
+
+
+    default BeanLocator getBeanLocator(Screen screen) {
+        return Extensions.getBeanLocator(screen);
     }
 
 
