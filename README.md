@@ -70,15 +70,114 @@ to `Tag` is by default not possible. The reason is that in order to do that, the
  and the entity to filter for (e.g. `Customer`).
 
 
+But it is possible to enable this kind of interaction with the `Tagging` entity by extending it and making the entity aware of the relationships.
+
+#### Extending Tagging Entity
+
+In the application you have to create an Entity that extends `Tagging` and uses CUBAs `@Extends` functionality to replace the original entity with the new subclass.
+
+```
+@Extends(Tagging.class)
+@Entity(name = "myApp$ExtendedTagging")
+public class ExtendedTagging extends Tagging {
+    private static final long serialVersionUID = 6795917365659671988L;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CUSTOMER_ID")
+    protected Customer customer;
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+}
+```
+
+With that it is possible to create an additional reference from the Customer entity to the Tagging entity like this:
+
+```
+@NamePattern("%s|name")
+@Table(name = "MYAPP_CUSTOMER")
+@Entity(name = "myApp$Customer")
+public class Customer extends StandardEntity {
+    private static final long serialVersionUID = 2263337300282568L;
+
+    @Column(name = "NAME")
+    protected String name;
+
+    @OneToMany(mappedBy = "customer")
+    protected List<ExtendedTagging> taggings;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<ExtendedTagging> getTaggings() {
+        return taggings;
+    }
+
+    public void setTaggings(List<ExtendedTagging> taggings) {
+        this.taggings = taggings;
+    }
+
+}
+```
+
+#### Using persistentAttribute option in @WithTags
+
+The second step is then to define the `persistentAttribute` in the usage of the `@WithTags` annotation (CUBA 6) or `WithTagsSupport` interface (CUBA 7) like this:
+
+```
+@WithTags(
+    listComponent = "customersTable",
+    persistentAttribute =  "customer"
+)
+class CustomerBrowse extends AnnotatableAbstractLookup {
+}
+```
+
+With that configuration in place, the persistent reference attribute will also be used to store the reference from the `Tagging` entity
+to the customer entity. When the Tagging functionality is used for multiple different entities, each of those entities can get a different persistent
+Attribute in the `ExtendedTagging`.
+
+Now it is possible to use e.g. the filter functionality of CUBA directly, to search e.g. for all Customers that are tagged
+with a particular tag.
 
 ![tags-overview-filtering](https://github.com/mariodavid/cuba-component-taggable/blob/master/img/tags-overview-filtering.png)
 
 
-But it is possible to enable this kind of interaction with the `Tag` entity.
-
-
 ![tags-overview-filter-definition](https://github.com/mariodavid/cuba-component-taggable/blob/master/img/tags-overview-filter-definition.png)
 
+### Scope tags with tag contexts
+
+By default the created tags in the application are available for selection in all contexts. So if both a `Customer` and a `Order` entity
+both use the Tag functionality, a new Tag that is entered in the context of the Customer browse screen, the same Tag will also be available
+for selection in the context of the Order browse screen.
+
+This global behavior might not always be desired. Therefore there is an option to set a String identifier called `tagContext` that will scope
+the Tags that are available for selection for only this context.
+
+In the example above, it is possible to scope the available tags for the customer use case to only be available within this screen:
+
+```
+@WithTags(
+    listComponent = "customersTable",
+    tagContext =  "customer"
+)
+class CustomerBrowse extends AnnotatableAbstractLookup {
+}
+```
+
+The scope might not only be applicable on a per entity basis. But also for different use-cases for one Entity it is possible
+to define different contexts on a per-screen basis.
 
 ## Example usage
 To see this application component in action, check out this example: [cuba-example-using-taggable](https://github.com/mariodavid/cuba-example-using-taggable).
