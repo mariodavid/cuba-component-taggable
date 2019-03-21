@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - persistent tagging support for JPA linking to `Tag` entity (see README.md)
 - tag context to scope the tagging functionality to a specific dimension (see README.md)
-- CUBA 7 screen API support (`WithTag`
+- CUBA 7 screen API support (`WithTagSupport` interface)
+
 ### Dependencies
 - CUBA 7.0.x
 - declarative controllers 0.8.0
