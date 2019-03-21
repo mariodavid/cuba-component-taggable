@@ -37,21 +37,50 @@ dependencies {
 ## Using the application component
 
 
-### @WithTags annotation
+Annotate your browse screens with the `@WithTags` annotation or by implementing the `WithTagsSupport` interface.
+The resulting UI looks like this:
+
+![tags-overview](https://github.com/mariodavid/cuba-component-taggable/blob/master/img/tags-overview.png)
+
+
+### @WithTags annotation (CUBA 6 screens)
 
 ```groovy
 @WithTags(listComponent = "customersTable", showTagsInList = true, showTagsAsLink = true, tagLinkOpenType = "NEW_TAB")
 class CustomerBrowse extends AnnotatableAbstractLookup {
+}
+```
+
+
+### WithTagsSupport interface (CUBA 7 screens)
+
+```java
+class CustomerBrowse extends StandardLookup<Customer> implements WithTagsSupport {
+
+    @Inject
+    private GroupTable<Customer> customersTable;
+
+    @Inject
+    private ButtonsPanel buttonsPanel;
+
+    @Override
+    Table getListComponent() {
+        return customersTable;
+    }
+
+    @Override
+    ButtonsPanel getButtonsPanel() {
+        return buttonsPanel;
+    }
 
 }
 ```
 
+### Configuration options
+
 With that your `Customer` entity will be taggable and might look like the following:
 
-
-![tags-overview](https://github.com/mariodavid/cuba-component-taggable/blob/master/img/tags-overview.png)
-
-The following options are available for the Annotation:
+The following options are available for the Annotation / Interface:
 
 * `listComponent` - the list component the tagging functionality should be placed upon (normally the Table of the browse screen
 * `showTagsInList` - this option will create a column in the table and renders all tags for the corresponding row
@@ -61,7 +90,7 @@ The following options are available for the Annotation:
 * `tagContext` - a string that identifies the context of this tag usage
 
 
-### JPA interactions with Tag entity
+## JPA interactions with Tag entity
 
 With the plain use of the `@WithTags` annotation, it is not directly possible to use the Tag entity within the JPA layer alongside with your entities.
 
@@ -72,7 +101,7 @@ to `Tag` is by default not possible. The reason is that in order to do that, the
 
 But it is possible to enable this kind of interaction with the `Tagging` entity by extending it and making the entity aware of the relationships.
 
-#### Extending Tagging Entity
+### Extending Tagging Entity
 
 In the application you have to create an Entity that extends `Tagging` and uses CUBAs `@Extends` functionality to replace the original entity with the new subclass.
 
@@ -131,7 +160,7 @@ public class Customer extends StandardEntity {
 }
 ```
 
-#### Using persistentAttribute option in @WithTags
+### Using persistentAttribute option in @WithTags
 
 The second step is then to define the `persistentAttribute` in the usage of the `@WithTags` annotation (CUBA 6) or `WithTagsSupport` interface (CUBA 7) like this:
 
@@ -156,7 +185,7 @@ with a particular tag.
 
 ![tags-overview-filter-definition](https://github.com/mariodavid/cuba-component-taggable/blob/master/img/tags-overview-filter-definition.png)
 
-### Scope tags with tag contexts
+## Scope tags with tag contexts
 
 By default the created tags in the application are available for selection in all contexts. So if both a `Customer` and a `Order` entity
 both use the Tag functionality, a new Tag that is entered in the context of the Customer browse screen, the same Tag will also be available
