@@ -34,3 +34,19 @@ create table DDCT_TAGGING (
     primary key (ID)
 )^
 -- end DDCT_TAGGING
+-- begin DDCT_CUSTOMER
+create table DDCT_CUSTOMER (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(255),
+    --
+    primary key (ID)
+)^
+-- end DDCT_CUSTOMER
