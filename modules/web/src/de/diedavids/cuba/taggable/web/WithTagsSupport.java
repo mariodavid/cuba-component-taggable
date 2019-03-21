@@ -128,7 +128,7 @@ public interface WithTagsSupport {
                         getTagContext(),
                         UiControllerUtils.getScreenData(screen)
                 ));
-
+        getListComponent().addAction(tagsAction);
         button.setAction(tagsAction);
 
     }
