@@ -10,7 +10,7 @@ Studio settings:
 * pass: `postgres`
 
 #### MySQL
-`docker run --name mysql -e MYSQL_ROOT_PASSWORD=mysql -e MYSQL_DATABASE=cuba -e MYSQL_USER=cuba -e MYSQL_PASS=cuba -p 3306:3306 -d mysq`
+`docker run --name mysql -e MYSQL_ROOT_PASSWORD=mysql -e MYSQL_DATABASE=cuba -e MYSQL_USER=cuba -e MYSQL_PASS=cuba -p 3306:3306 -d mysql`
 
 Studio settings: 
 * JDBC: `jdbc:mysql//localhost/cuba`
