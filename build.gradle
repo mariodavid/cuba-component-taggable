@@ -1,5 +1,5 @@
 buildscript {
-    ext.cubaVersion = '7.0.1'
+    ext.cubaVersion = '7.1.0'
     repositories {
 
         mavenLocal()
@@ -97,12 +97,12 @@ subprojects {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent("de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.8.0")
-    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.5.0")
+    appComponent("de.diedavids.cuba.entitysoftreference:entity-soft-reference-global:0.6.1")
+    appComponent('de.balvi.cuba.declarativecontrollers:declarativecontrollers-global:0.9.0')
 
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.2.9'
+def hsql = 'org.hsqldb:hsqldb:2.4.1'
 
 
 allprojects {
