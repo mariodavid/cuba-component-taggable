@@ -14,7 +14,7 @@ script:
 - "./gradlew --no-daemon check"
 deploy:
   provider: script
-  script: "./gradlew clean assemble bintrayUpload --debug"
+  script: "./gradlew clean assemble bintrayUpload"
   on:
     tags: true
 env:
