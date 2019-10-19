@@ -5,12 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-## [0.5.1] - 2019-09-23
+## [0.5.3] - 2019-10-19
 
 ### Dependencies
 - CUBA 7.1.x
 - declarative controllers 0.9.0
-- entity-soft-reference 0.6.1
+- entity-soft-reference 0.6.5
 
 
 ## [0.4.0] - 2019-03-21
