@@ -4,6 +4,7 @@ import com.haulmont.bali.util.Dom4j;
 import com.haulmont.cuba.testsupport.TestContainer;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +31,8 @@ public class DdctTestContainer extends TestContainer {
                 // specifically for test environment. You can replace it with your own
                 // or add another one in the end.
                 "com/haulmont/cuba/testsupport/test-app.properties");
-        initDbProperties();
+
+        autoConfigureDataSource();
     }
 
     private void initDbProperties() {
@@ -61,18 +63,21 @@ public class DdctTestContainer extends TestContainer {
         }
 
         @Override
-        public void before() throws Throwable {
+        public void beforeAll(ExtensionContext extensionContext) throws Exception {
             if (!initialized) {
-                super.before();
+                super.beforeAll(extensionContext);
                 initialized = true;
             }
             setupContext();
         }
 
+
+        @SuppressWarnings("RedundantThrows")
         @Override
-        public void after() {
+        public void afterAll(ExtensionContext extensionContext) throws Exception {
             cleanupContext();
             // never stops - do not call super
         }
+
     }
 }
