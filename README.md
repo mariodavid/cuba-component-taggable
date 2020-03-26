@@ -14,6 +14,7 @@ This application component let's you enhance your entities with a generic taggin
 
 | Platform Version | Add-on Version |
 | ---------------- | -------------- |
+| 7.2.x            | 0.6.x          |
 | 7.1.x            | 0.5.x          |
 | 7.0.x            | 0.4.x          |
 | 6.10.x           | 0.3.x          |
@@ -35,13 +36,34 @@ dependencies {
 ```
 
 
+## Example Usage
+
+To see this application component in action, check out this example: [cuba-example-using-taggable](https://github.com/mariodavid/cuba-example-using-taggable).
+
+### CHANGELOG
+
+Information on changes that happen through the different versions of the application component can be found in the [CHANGELOG](CHANGELOG.md).
+The Changelog also contains information about breaking changes and tips on how to resolve them.
+
+
+## Supported DBMS
+
+The following databases are supported by this application component:
+
+* HSQLDB
+* PostgreSQL
+* MySQL
+
+All other DBMS systems are also possible to work with by the fact that CUBA studio generates the corresponding 
+init / update scripts within the application.
+
 ## Using the application component
 
 
 Annotate your browse screens with the `@WithTags` annotation or by implementing the `WithTagsSupport` interface.
 The resulting UI looks like this:
 
-![tags-overview](https://github.com/mariodavid/cuba-component-taggable/blob/master/img/tags-overview.png)
+![tags-overview](img/tags-overview.png)
 
 
 ### @WithTags annotation (CUBA 6 screens)
@@ -181,10 +203,10 @@ Attribute in the `ExtendedTagging`.
 Now it is possible to use e.g. the filter functionality of CUBA directly, to search e.g. for all Customers that are tagged
 with a particular tag.
 
-![tags-overview-filtering](https://github.com/mariodavid/cuba-component-taggable/blob/master/img/tags-overview-filtering.png)
+![tags-overview-filtering](img/tags-overview-filtering.png)
 
 
-![tags-overview-filter-definition](https://github.com/mariodavid/cuba-component-taggable/blob/master/img/tags-overview-filter-definition.png)
+![tags-overview-filter-definition](img/tags-overview-filter-definition.png)
 
 ## Scope tags with tag contexts
 
@@ -209,15 +231,3 @@ class CustomerBrowse extends AnnotatableAbstractLookup {
 The scope might not only be applicable on a per entity basis. But also for different use-cases for one Entity it is possible
 to define different contexts on a per-screen basis.
 
-## Example usage
-To see this application component in action, check out this example: [cuba-example-using-taggable](https://github.com/mariodavid/cuba-example-using-taggable).
-
-
-
-## Supported DBMS
-
-The following databases are supported by this application component:
-
-* HSQLDB
-* PostgreSQL
-* MySQL
