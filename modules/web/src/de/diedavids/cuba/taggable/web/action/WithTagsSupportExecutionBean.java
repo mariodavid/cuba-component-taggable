@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component(WithTagsSupportExecution.NAME)
@@ -34,7 +35,9 @@ public class WithTagsSupportExecutionBean implements WithTagsSupportExecution {
 
 
   private Map<String, Object> getScreenParams(Entity item, String persistentAttribute, String tagContext) {
-    Map<String, Object> result = ParamsMap.of("taggable", item);
+    Map<String, Object> result = new HashMap<>();
+
+    result.put("taggable", item);
 
     if (!StringUtils.isEmpty(persistentAttribute)) {
       result.put("persistentAttribute", persistentAttribute);
